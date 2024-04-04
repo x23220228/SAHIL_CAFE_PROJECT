@@ -96,7 +96,7 @@ LOCALE_PATHS = [
 ]
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = '/home/ec2-user/environment/CAFE_MANAGEMENT/staticfiles'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'my_cafe/static'),
 ]
