@@ -21,5 +21,5 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('my_cafe/', include('my_cafe.urls')),
+    path('', include('my_cafe.urls')),  # Include the URLs of your 'my_cafe' application without any prefix
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
