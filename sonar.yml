@@ -10,7 +10,7 @@ on:
 phases:
   install:
     runtime-versions:
-      python: 3.11
+      python: 3.11  # Match the Python version with SonarCloud configuration
 
   pre_build:
     commands:
