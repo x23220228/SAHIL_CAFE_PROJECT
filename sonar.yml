@@ -1,38 +1,20 @@
 version: 0.2
 
-name: x23220228_SAHIL_CAFE_PROJECT
-
-on:
-  push:
-    branches:
-      - main
-
 phases:
   install:
     runtime-versions:
-      python: 3.11  # Match the Python version with SonarCloud configuration
+      python: 3.11
 
   pre_build:
     commands:
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run SonarCloud scanner
-        env:
-          # Set your SonarCloud project key
-          SONAR_PROJECT_KEY: x23220228_SAHIL_CAFE_PROJECT
-          # Set your SonarCloud organization key
-          SONAR_ORGANIZATION: x23220228-sahil-shaikh
-          # Set your SonarCloud token
-          SONAR_TOKEN: dfaae103df5165b706b772497bac9ada0e655410
-        run: /opt/sonar-scanner/bin/sonar-scanner \
-             -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-             -Dsonar.organization=${SONAR_ORGANIZATION} \
-             -Dsonar.projectName=SAHIL_CAFE_PROJECT \
-             -Dsonar.projectVersion=1.0 \
-             -Dsonar.python.version=3.8 \
-             -Dsonar.sources=. \
-             -Dsonar.host.url=https://sonarcloud.io \
-             -Dsonar.login=${SONAR_TOKEN}
+      - python -m pip install --upgrade pip
+      - pip install -r requirements.txt
+      - /opt/sonar-scanner/bin/sonar-scanner \
+          -Dsonar.projectKey=x23220228_SAHIL_CAFE_PROJECT \
+          -Dsonar.organization=x23220228-sahil-shaikh \
+          -Dsonar.projectName=SAHIL_CAFE_PROJECT \
+          -Dsonar.projectVersion=1.0 \
+          -Dsonar.python.version=3.8 \
+          -Dsonar.sources=.
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=dfaae103df5165b706b772497bac9ada0e655410
