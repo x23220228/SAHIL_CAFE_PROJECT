@@ -1,3 +1,8 @@
+"""
+DJANGO PROJECT
+
+"""
+
 import os
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
@@ -6,13 +11,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_string(50, 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'))
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_string(32))
 
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = ['https://8e8b7cb27e6c473daae935240cb660ab.vfs.cloud9.eu-west-2.amazonaws.com']
+CSRF_TRUSTED_ORIGINS=['https://8e8b7cb27e6c473daae935240cb660ab.vfs.cloud9.eu-west-2.amazonaws.com']
 
 INSTALLED_APPS = [
     'my_cafe',
@@ -97,9 +102,7 @@ LOCALE_PATHS = [
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'my_cafe/static'),
-]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'my_cafe/static'),]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
