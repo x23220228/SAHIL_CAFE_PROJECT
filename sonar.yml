@@ -4,16 +4,15 @@ phases:
   install:
     runtime-versions:
       python: 3.11 
+      
   pre_build:
     commands:
       - pip install -r requirements.txt # Install project dependencies
-      - curl --fail -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.0.2311-linux.zip -o sonar-scanner.zip
-      - unzip sonar-scanner.zip
-      - export PATH=$PATH:$PWD/sonar-scanner/bin # Add SonarScanner to PATH
+      
 
   build:
     commands:
-      - sonar-scanner \
+      - /opt/sonar-scanner/bin/sonar-scanner \
           -Dsonar.projectKey=x23220228_SAHIL_CAFE_PROJECT \
           -Dsonar.projectName=SAHIL_CAFE_PROJECT \
           -Dsonar.projectVersion=1.0 \
