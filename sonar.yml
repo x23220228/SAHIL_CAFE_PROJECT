@@ -1,30 +1,24 @@
 version: 0.2
-
+env:
+  secrets-manager:
+    LOGIN: arn:aws:secretsmanager:eu-west-1:250738637992:secret:SAHIL_CAFE_PROJECT-G1bbuE:dfaae103df5165b706b772497bac9ada0e655410
+    HOST: arn:aws:secretsmanager:eu-west-1:250738637992:secret:SAHIL_CAFE_PROJECT-G1bbuE:HOST
+    Organization: arn:aws:secretsmanager:eu-west-1:250738637992:secret:SAHIL_CAFE_PROJECT-G1bbuE:Organization
+    Project: arn:aws:secretsmanager:eu-west-1:250738637992:secret:SAHIL_CAFE_PROJECT-G1bbuE:Project
 phases:
   install:
     runtime-versions:
-      python: 3.11
+      java: openjdk8
     commands:
-      # Install SonarScanner
-      - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
-      - unzip sonar-scanner-cli-4.6.2.2472-linux.zip -d /opt
-      - export PATH="$PATH:/opt/sonar-scanner-cli-4.6.2.2472-linux/bin"
-
-  pre_build:
-    commands:
-      - pip install -r requirements.txt
-
+      - yum update -y
+      - yum install -y jq
+      - wget http://www-eu.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
+      - tar xzf apache-maven-3.5.4-bin.tar.gz
+      - ln -s apache-maven-3.5.4 maven
+      - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip
+      - unzip ./sonar-scanner-cli-3.3.0.1492-linux.zip
+      - export PATH=$PATH:/sonar-scanner-3.3.0.1492-linux/bin/
   build:
     commands:
-      - sonar-scanner \
-        -Dsonar.projectKey=x23220228_SAHIL_CAFE_PROJECT \
-        -Dsonar.projectName=SAHIL_CAFE_PROJECT \
-        -Dsonar.projectVersion=1.0 \
-        -Dsonar.organization=x23220228-sahil-shaikh \
-        -Dsonar.host.url=https://sonarcloud.io \
-        -Dsonar.login=dfaae103df5165b706b772497bac9ada0e655410 \
-        -Dsonar.python.version=3.8
-
-artifacts:
-  files:
-    - '**/*'
+      - mvn test     
+      - mvn sonar:sonar -Dsonar.login=$LOGIN -Dsonar.host.url=$HOST -Dsonar.projectKey=$Project -Dsonar.organization=$Organization
