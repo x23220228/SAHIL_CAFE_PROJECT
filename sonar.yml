@@ -1,24 +1,21 @@
 version: 0.2
-env:
-  secrets-manager:
-    LOGIN: arn:aws:secretsmanager:eu-west-1:250738637992:secret:SAHIL_CAFE_PROJECT-G1bbuE:dfaae103df5165b706b772497bac9ada0e655410
-    HOST: arn:aws:secretsmanager:eu-west-1:250738637992:secret:SAHIL_CAFE_PROJECT-G1bbuE:HOST
-    Organization: arn:aws:secretsmanager:eu-west-1:250738637992:secret:SAHIL_CAFE_PROJECT-G1bbuE:Organization
-    Project: arn:aws:secretsmanager:eu-west-1:250738637992:secret:SAHIL_CAFE_PROJECT-G1bbuE:Project
+
 phases:
   install:
     runtime-versions:
-      java: openjdk8
+      java: corretto17
+  pre_build:
     commands:
-      - yum update -y
-      - yum install -y jq
-      - wget http://www-eu.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
-      - tar xzf apache-maven-3.5.4-bin.tar.gz
-      - ln -s apache-maven-3.5.4 maven
-      - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip
-      - unzip ./sonar-scanner-cli-3.3.0.1492-linux.zip
-      - export PATH=$PATH:/sonar-scanner-3.3.0.1492-linux/bin/
+      - export SONAR_SCANNER_VERSION=5.0.1.3006
+      - export SONAR_SCANNER_HOME=$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-linux
+      - curl --create-dirs -sSLo $HOME/.sonar/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-linux.zip
+      - unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
+      - export PATH=$SONAR_SCANNER_HOME/bin:$PATH
+      - export SONAR_SCANNER_OPTS="-server"
   build:
     commands:
-      - mvn test     
-      - mvn sonar:sonar -Dsonar.login=$LOGIN -Dsonar.host.url=$HOST -Dsonar.projectKey=$Project -Dsonar.organization=$Organization
+      - set -e
+      - sonar-scanner -X -Dsonar.login=dfaae103df5165b706b772497bac9ada0e655410 -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=x23220228_SAHIL_CAFE_PROJECT -Dsonar.organization=x23220228-sahil-shaikh -DgeneratePom=true
+      - sleep 5
+      - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=x23220228_SAHIL_CAFE_PROJECT >result.json
+      - cat result.json
