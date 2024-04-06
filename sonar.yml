@@ -4,17 +4,27 @@ phases:
   install:
     runtime-versions:
       python: 3.11
+    commands:
+      # Install SonarScanner
+      - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+      - unzip sonar-scanner-cli-4.6.2.2472-linux.zip -d /opt
+      - export PATH="$PATH:/opt/sonar-scanner-cli-4.6.2.2472-linux/bin"
 
   pre_build:
     commands:
-      - python -m pip install --upgrade pip
       - pip install -r requirements.txt
-      - /bin/bash -c "/opt/sonar-scanner/bin/sonar-scanner \
-          -Dsonar.projectKey=x23220228_SAHIL_CAFE_PROJECT \
-          -Dsonar.organization=x23220228-sahil-shaikh \
-          -Dsonar.projectName=SAHIL_CAFE_PROJECT \
-          -Dsonar.projectVersion=1.0 \
-          -Dsonar.python.version=3.8 \
-          -Dsonar.sources=$CODEBUILD_SRC_DIR \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.login=dfaae103df5165b706b772497bac9ada0e655410"
+
+  build:
+    commands:
+      - sonar-scanner \
+        -Dsonar.projectKey=x23220228_SAHIL_CAFE_PROJECT \
+        -Dsonar.projectName=SAHIL_CAFE_PROJECT \
+        -Dsonar.projectVersion=1.0 \
+        -Dsonar.organization=x23220228-sahil-shaikh \
+        -Dsonar.host.url=https://sonarcloud.io \
+        -Dsonar.login=dfaae103df5165b706b772497bac9ada0e655410 \
+        -Dsonar.python.version=3.8
+
+artifacts:
+  files:
+    - '**/*'

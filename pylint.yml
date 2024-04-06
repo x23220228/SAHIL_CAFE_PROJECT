@@ -12,6 +12,7 @@ phases:
       - python --version
       - pylint $CODEBUILD_SRC_DIR/*.py
       - pylint $CODEBUILD_SRC_DIR/cafe_mgmt/*.py
+
 artifacts:
   files:
     - '**/*'
