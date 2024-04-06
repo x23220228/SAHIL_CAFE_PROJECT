@@ -15,7 +15,8 @@ phases:
   build:
     commands:
       - set -e
-      - sonar-scanner -X -Dsonar.login=dfaae103df5165b706b772497bac9ada0e655410 -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=x23220228_SAHIL_CAFE_PROJECT -Dsonar.organization=x23220228-sahil-shaikh -DgeneratePom=true
+      - sonar-scanner -X -Dsonar.login=dfaae103df5165b706b772497bac9ada0e655410 -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=x23220228_SAHIL_CAFE_PROJECT -Dsonar.organization=x23220228-sahil-shaikh -DgeneratePom=true -Xmx2g
       - sleep 5
       - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=x23220228_SAHIL_CAFE_PROJECT >result.json
       - cat result.json
+      
