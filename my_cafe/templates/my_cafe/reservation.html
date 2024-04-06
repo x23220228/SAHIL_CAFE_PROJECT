@@ -49,20 +49,21 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12 text-center logo-wrap">
-                <div id="fh5co-logo"><a href="{% url 'index' %}">{% trans "Sahil's Cafe" %}<span>.</span></a></div>
+                <div id="fh5co-logo"><a href="{% url 'index' %}">{% trans 'Sahil\'s Cafe' %}<span>.</span></a></div>
             </div>
             <div class="col-xs-12 text-center menu-1 menu-wrap">
                 <ul>
-                    <li class="active"><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
-                    <li><a href="{% url 'menu' %}">{% trans "Menu" %}</a></li>
-                    <li><a href="{% url 'reservation' %}">{% trans "Reservation" %}</a></li>
-                    <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
+                    <li class="active"><a href="{% url 'index' %}">{% trans 'Home' %}</a></li>
+                    <li><a href="{% url 'menu' %}">{% trans 'Menu' %}</a></li>
+                    <li><a href="{% url 'reservation' %}">{% trans 'Reservation' %}</a></li>
+                    <li><a href="{% url 'contact' %}">{% trans 'Contact' %}</a></li>
                     {% if user.is_authenticated %}
-                        <li><a href="{% url 'logout' %}">{% trans "Logout" %}</a></li>
+                        <li><a href="{% url 'order_history' %}">{% trans 'Order History' %}</a></li>
+                        <li><a href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
                         <li><a href="#">{{ user.username }}</a></li>
                     {% else %}
-                        <li><a href="{% url 'login' %}">{% trans "Login" %}</a></li>
-                        <li><a href="{% url 'signup' %}">{% trans "Sign Up" %}</a></li>
+                        <li><a href="{% url 'login' %}">{% trans 'Login' %}</a></li>
+                        <li><a href="{% url 'signup' %}">{% trans 'Sign Up' %}</a></li>
                     {% endif %}
                 </ul>
             </div>

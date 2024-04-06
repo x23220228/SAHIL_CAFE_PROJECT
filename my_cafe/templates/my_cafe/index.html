@@ -58,6 +58,7 @@
                     <li><a href="{% url 'reservation' %}">{% trans 'Reservation' %}</a></li>
                     <li><a href="{% url 'contact' %}">{% trans 'Contact' %}</a></li>
                     {% if user.is_authenticated %}
+                        <li><a href="{% url 'order_history' %}">{% trans 'Order History' %}</a></li>
                         <li><a href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
                         <li><a href="#">{{ user.username }}</a></li>
                     {% else %}
@@ -123,7 +124,34 @@
 						<p></p>
 					</div>
 				</div>
-                <!-- Other menu items -->
+				
+				<div class="col-md-3 col-sm-6 col-xs-6 col-xxs-12 fh5co-item-wrap animate-box">
+					<div class="fh5co-item">
+						<img src="https://x23220228-cafe-website.s3.eu-west-1.amazonaws.com/images/gallery_8.jpg" class="img-responsive" alt="{% trans 'Images' %}">
+						<h3>{% trans 'Vada Pava' %}</h3>
+						<span class="fh5co-price">£13<sup>.00</sup></span>
+						<p></p>
+					</div>
+				</div>
+				
+				<div class="col-md-3 col-sm-6 col-xs-6 col-xxs-12 fh5co-item-wrap animate-box">
+					<div class="fh5co-item">
+						<img src="https://x23220228-cafe-website.s3.eu-west-1.amazonaws.com/images/gallery_6.jpg" class="img-responsive" alt="{% trans 'Images' %}">
+						<h3>{% trans 'Pav Bhaji' %}</h3>
+						<span class="fh5co-price">£17<sup>.50</sup></span>
+						<p></p>
+					</div>
+				</div>
+				
+				<div class="col-md-3 col-sm-6 col-xs-6 col-xxs-12 fh5co-item-wrap animate-box">
+					<div class="fh5co-item">
+						<img src="https://x23220228-cafe-website.s3.eu-west-1.amazonaws.com/images/gallery_7.jpg" class="img-responsive" alt="{% trans 'Images' %}">
+						<h3>{% trans 'Masala Dosa' %}</h3>
+						<span class="fh5co-price">£12<sup>.50</sup></span>
+						<p></p>
+					</div>
+				</div>
+				
 			</div>
 		</div>
 	</div>

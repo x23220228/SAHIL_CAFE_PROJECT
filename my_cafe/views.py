@@ -1,9 +1,13 @@
-from django.shortcuts import render, redirect  # Added redirect import
+from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import MenuItem
+from .models import MenuItem, Order
 from django.contrib.auth.decorators import login_required
-from .models import Order
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm, SetPasswordForm
+from django.contrib.auth import login, logout
 
+# Views for main pages
 def index(request):
     return render(request, 'my_cafe/index.html')
 
@@ -16,32 +20,17 @@ def menu(request):
 
 def reservation(request):
     return render(request, 'my_cafe/reservation.html')
-    
-    
-#######PLACE ORDER######
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.core.mail import send_mail
-from django.conf import settings
-from .models import MenuItem, Order
-
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.core.mail import send_mail
-from django.conf import settings
-from .models import MenuItem, Order
-
+# Place Order View
 @login_required
 def place_order(request):
-    menu_items = MenuItem.objects.all()  # Define menu_items here
+    menu_items = MenuItem.objects.all()  # Retrieve all menu items
     
     if request.method == 'POST':
         user = request.user
         menu_item_id = request.POST.get('menu_item')
         quantity = request.POST.get('quantity')
         
-        # Assuming MenuItem model has been defined
         menu_item = MenuItem.objects.get(pk=menu_item_id)
         
         # Save order to the database
@@ -54,15 +43,37 @@ def place_order(request):
         to_email = [user.email]
         send_mail(subject, message, from_email, to_email, fail_silently=True)
         
-        # Redirect to a success page or homepage
-        return redirect('menu')  # Replace 'menu' with the appropriate URL name
+        # Redirect to menu page after successful order placement
+        return redirect('menu')
     
-    # Handle GET requests or invalid form submissions
     return render(request, 'my_cafe/place_order.html', {'menu_items': menu_items})
-    
-    
-############accounts#######
 
+# Delete Order View
+@login_required
+def delete_order(request, order_id):
+    # Get the order object
+    order = Order.objects.get(id=order_id)
+
+    # Check if the logged-in user is the owner of the order
+    if request.user == order.user:
+        # Delete the order
+        order.delete()
+        messages.success(request, 'Order deleted successfully.')
+    else:
+        # If the user is not the owner of the order, show an error message
+        messages.error(request, 'You are not authorized to delete this order.')
+
+    # Redirect back to the order history page
+    return redirect('order_history')  # Replace 'order_history' with the appropriate URL name for your order history page
+
+# Order History View
+@login_required
+def order_history(request):
+    # Retrieve orders belonging to the logged-in user
+    orders = Order.objects.filter(user=request.user)
+    return render(request, 'my_cafe/order_history.html', {'orders': orders})
+
+# Account-related views
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth import login, logout
 

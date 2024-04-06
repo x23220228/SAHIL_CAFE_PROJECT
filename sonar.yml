@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+  pre_build:
+    commands:
+      - pip install -r requirements.txt # Install project dependencies
+      - echo "[INFO] Downloading sonar-scanner"
+      - curl --location --silent --show-error "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip" > sonar-scanner-cli.zip
+      - unzip -qq sonar-scanner-cli.zip
+  build:
+    commands:
+      - sonar-scanner/bin/sonar-scanner \
+          -Dsonar.projectKey=x23220228_SAHIL_CAFE_PROJECT \
+          -Dsonar.projectName=SAHIL_CAFE_PROJECT \
+          -Dsonar.projectVersion=1.0 \
+          -Dsonar.organization=x23220228-sahil-shaikh \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=dfaae103df5165b706b772497bac9ada0e655410 \
+          -Dsonar.python.version=3.8
+          # Add any additional analysis parameters here
+
+artifacts:
+  files:
+    - '**/*'
