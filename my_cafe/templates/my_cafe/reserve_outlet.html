@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{% trans "Sahil's Cafe" %}</title>
+    <title>{% trans "Sahil's Cafe - Reserve Outlet" %}</title>
 
     <!-- Facebook and Twitter integration -->
     <meta property="og:title" content=""/>
@@ -65,14 +65,14 @@
     </div>
 </nav>
 
-	<header id="fh5co-header" class="fh5co-cover js-fullheight" role="banner" style="background-image: url(https://x23220228-cafe-website.s3.eu-west-1.amazonaws.com/images/hero_1.jpeg);" data-stellar-background-ratio="0.5">
+<header id="fh5co-header" class="fh5co-cover js-fullheight" role="banner" style="background-image: url(https://x23220228-cafe-website.s3.eu-west-1.amazonaws.com/images/hero_1.jpeg);" data-stellar-background-ratio="0.5">
 		<div class="overlay"></div>
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12 text-center">
 					<div class="display-t js-fullheight">
 						<div class="display-tc js-fullheight animate-box" data-animate-effect="fadeIn">
-							<h1>{% trans 'Reserved a Table Today!' %}</h1>
+							<h1>{% trans 'Confirm Your Booking' %}</h1>
 							<h2>{% trans 'Brought to you by Sahil Shaikh' %}</h2>
 						</div>
 					</div>
@@ -83,22 +83,38 @@
 
     <div class="container">
         <div class="row">
-            {% for outlet in outlets %}
-            <div class="col-md-4">
-                <div class="fh5co-project-item">
-                    <img src="{{ outlet.image.url }}" alt="{{ outlet.name }}" class="img-responsive">
-                    <div class="fh5co-text">
-                        <h2>{{ outlet.name }}</h2>
-                        <p>{{ outlet.location }}</p>
-                        <p>{{ outlet.description }}</p>
-                        <a href="{% url 'reserve_outlet' outlet.id %}" class="btn btn-primary">{% trans 'Reserve Now' %}</a>
+            <div class="col-md-8 col-md-offset-2">
+                <div class="fh5co-spacer fh5co-spacer-sm"></div>
+                <h2 class="text-center">{% trans 'Reserve Outlet' %}</h2>
+                <div class="fh5co-spacer fh5co-spacer-sm"></div>
+                <form method="post" action="{% url 'reserve_outlet' outlet.id %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="name">{% trans 'Name' %}</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label for="email">{% trans 'Email' %}</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mobile">{% trans 'Mobile Number' %}</label>
+                        <input type="text" class="form-control" id="mobile" name="mobile" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="people">{% trans 'Number of People' %}</label>
+                        <input type="number" class="form-control" id="people" name="people" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="datetime">{% trans 'Date and Time' %}</label>
+                        <input type="datetime-local" class="form-control" id="datetime" name="datetime" required>
+                    </div>
+                    <input type="hidden" name="outlet_id" value="{{ outlet.id }}">
+                    <button type="submit" class="btn btn-primary">{% trans 'Submit' %}</button>
+                </form>
             </div>
-            {% endfor %}
         </div>
     </div>
-
 </div>
 
 <footer id="fh5co-footer" role="contentinfo" class="fh5co-section">
@@ -141,7 +157,7 @@
 
 		</div>
 	</footer>
-
+	
 <!-- JavaScript files -->
 <script src="{% static 'my_cafe/js/jquery.min.js' %}"></script>
 <script src="{% static 'my_cafe/js/jquery.easing.1.3.js' %}"></script>

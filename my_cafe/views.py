@@ -1,25 +1,24 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import MenuItem, Order
+from .models import MenuItem, Order, Outlet, Reservation
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth import login, logout
+from .forms import ReservationForm
 
 # Views for main pages
 def index(request):
     return render(request, 'my_cafe/index.html')
-
-def contact(request):
-    return render(request, 'my_cafe/contact.html')
 
 def menu(request):
     menu_items = MenuItem.objects.all()
     return render(request, 'my_cafe/menu.html', {'menu_items': menu_items})
 
 def reservation(request):
-    return render(request, 'my_cafe/reservation.html')
+    outlets = Outlet.objects.all()
+    return render(request, 'my_cafe/reservation.html', {'outlets': outlets})
 
 # Place Order View
 @login_required
@@ -72,6 +71,68 @@ def order_history(request):
     # Retrieve orders belonging to the logged-in user
     orders = Order.objects.filter(user=request.user)
     return render(request, 'my_cafe/order_history.html', {'orders': orders})
+
+####Reservation
+
+@login_required
+def reserve_outlet(request, outlet_id):
+    try:
+        outlet = Outlet.objects.get(pk=outlet_id)
+        if request.method == 'POST':
+            form = ReservationForm(request.POST)
+            if form.is_valid():
+                reservation = form.save(commit=False)
+                reservation.outlet = outlet
+                reservation.user = request.user  # Set the user for the reservation
+                reservation.save()
+                messages.success(request, 'Reservation successful!')
+                return redirect('index')
+        else:
+            form = ReservationForm()
+        return render(request, 'my_cafe/reserve_outlet.html', {'outlet': outlet, 'form': form})
+    except Outlet.DoesNotExist:
+        return redirect('outlet_not_found')
+
+def my_reservation(request):
+    reservations = Reservation.objects.filter(user=request.user)
+    return render(request, 'my_cafe/my_reservation.html', {'reservations': reservations})
+    
+@login_required
+def edit_reservation(request, reservation_id):
+    # Fetch the reservation object or return a 404 error if not found
+    reservation = get_object_or_404(Reservation, pk=reservation_id)
+
+    if request.method == 'POST':
+        # Populate the form with the data from the existing reservation and the submitted data
+        form = ReservationForm(request.POST, instance=reservation)
+        if form.is_valid():
+            # Save the changes to the reservation
+            form.save()
+            messages.success(request, 'Reservation updated successfully.')
+            return redirect('my_cafe/my_reservation')
+    else:
+        # Populate the form with the data from the existing reservation
+        form = ReservationForm(instance=reservation)
+    
+    # Render the template with the form
+    return render(request, 'my_cafe/edit_reservation.html', {'form': form})
+
+@login_required
+def delete_reservation(request, reservation_id):
+    # Get the reservation object
+    reservation = Reservation.objects.get(id=reservation_id)
+
+    # Check if the logged-in user is the owner of the reservation
+    if request.user == reservation.user:
+        # Delete the reservation
+        reservation.delete()
+        messages.success(request, 'Reservation deleted successfully.')
+    else:
+        # If the user is not the owner of the reservation, show an error message
+        messages.error(request, 'You are not authorized to delete this reservation.')
+
+    # Redirect back to the reservations page
+    return redirect('my_reservation')
 
 # Account-related views
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm, SetPasswordForm
